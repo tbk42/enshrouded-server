@@ -35,7 +35,7 @@
       "name": "Game Port",
       "description": "UDP+TCP game port.",
       "env_variable": "GAME_PORT",
-      "default_value": "15637",
+      "default_value": "15636",
       "user_viewable": true,
       "user_editable": true,
       "rules": "required|integer"
@@ -44,7 +44,7 @@
       "name": "Query Port",
       "description": "UDP query port.",
       "env_variable": "QUERY_PORT",
-      "default_value": "15636",
+      "default_value": "15637",
       "user_viewable": true,
       "user_editable": true,
       "rules": "required|integer"

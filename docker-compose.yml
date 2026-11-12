@@ -26,12 +26,12 @@ services:
     image: ghcr.io/pelican/panel:latest
     restart: unless-stopped
     ports:
-      - "${PANEL_PORT:-8080}:80"
+      - "${PANEL_PORT:-36747}:80"
       - "${PANEL_PORT_SSL:-8443}:443"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
-      APP_URL: "http://localhost:${PANEL_PORT:-8080}"
+      APP_URL: "http://localhost:${PANEL_PORT:-36747}"
       ADMIN_EMAIL: "admin@localhost"
       XDG_DATA_HOME: /pelican-data
       CACHE_STORE: redis
@@ -56,8 +56,8 @@ services:
     image: ghcr.io/pelican/wings:latest
     restart: unless-stopped
     ports:
-      - "${WINGS_PORT:-8081}:8080"
-      - "${WINGS_SFTP_PORT:-2022}:2022"
+      - "${WINGS_PORT:-36748}:8080"
+      - "${WINGS_SFTP_PORT:-36479}:2022"
     environment:
       TZ: "UTC"
     volumes:
