@@ -1,30 +1,23 @@
-# Wings daemon configuration.
-# 1. Create a node in the Pelican panel (Admin -> Nodes -> Create Node).
-# 2. Copy the node's UUID and token from the panel into the fields below.
-# 3. Set panel_url to your panel URL.
-# 4. Save as wings/config.yml (remove .example) and restart Wings.
 debug: false
-uuid: "00000000-0000-0000-0000-000000000000"
-token_id: "change-me"
-token: "change-me"
+uuid: "17ae6956-a135-4858-b174-3a06e9d92267"
+token_id: "PtcDdPNOZNe6chxs"
+token: "0H3MeH0RFWiUY3QiWmGH6isSiazoHZXl2B0liZFYOn4iKLRQQCrid8vYtlcmn73A"
 api:
   host: 0.0.0.0
-  port: 8080
+  port: 36748
   ssl:
     enabled: false
     cert: ""
     key: ""
-  upload_limit: 100
+  upload_limit: 256
 system:
   data: /var/lib/pelican
   sftp:
     bind_address: 0.0.0.0
-    bind_port: 2022
+    bind_port: 36479
     read_only: false
 panel:
-  # URL of the Pelican panel (as seen from inside the Wings container).
-  url: "http://panel"
-  # If your panel uses a different hostname/port, adjust above.
-remote: "https://github.com/pelican-dev/wings/releases/latest/download/wings_linux_amd64"
+  url: "http://localhost:36747"
+remote: "http://localhost:36747"
 allowed_mounts: []
 allowed_origins: []

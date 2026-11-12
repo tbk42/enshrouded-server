@@ -1,0 +1,18 @@
+debug: false
+uuid: 17ae6956-a135-4858-b174-3a06e9d92267
+token_id: '********'
+token: '********'
+api:
+  host: 0.0.0.0
+  port: 8080
+  ssl:
+    enabled: false
+    cert: /etc/letsencrypt/live/wings/fullchain.pem
+    key: /etc/letsencrypt/live/wings/privkey.pem
+  upload_limit: 256
+system:
+  data: /var/lib/pelican/volumes
+  sftp:
+    bind_port: 2022
+allowed_mounts: []
+remote: 'https://pelican.blueboxcars.dev'

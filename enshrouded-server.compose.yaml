@@ -47,21 +47,22 @@ services:
       - database
 
   # ---------- Wings (daemon that manages game-server containers) ----------
+  # network_mode: host so Wings binds directly to the host network. This lets
+  # both the panel (container) and the browser (host) reach Wings on the same
+  # address/port, which Pelican requires (single FQDN for panel + browser).
   wings:
     image: ghcr.io/pelican/wings:latest
     restart: unless-stopped
-    ports:
-      - "${WINGS_PORT:-36748}:8080"
-      - "${WINGS_SFTP_PORT:-36479}:2022"
+    network_mode: host
     environment:
       TZ: "UTC"
+      WINGS_UID: "988"
+      WINGS_GID: "988"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./wings/config.yml:/etc/pelican/config.yml:ro
       - ./data/wings:/var/lib/pelican
       - ./gamefiles:/var/lib/pelican/volumes
-    depends_on:
-      - panel
 
   # ---------- Enshrouded server (managed by Wings via the egg) ----------
   # NOTE: Do NOT start this service directly. Wings creates and manages the
