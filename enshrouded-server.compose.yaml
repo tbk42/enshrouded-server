@@ -16,11 +16,6 @@ services:
     volumes:
       - ./data/db:/var/lib/mysql
 
-  # ---------- Redis (cache + queues) ----------
-  cache:
-    image: redis:alpine
-    restart: unless-stopped
-
   # ---------- Pelican Panel (web UI) ----------
   panel:
     image: ghcr.io/pelican/panel:latest
@@ -35,10 +30,9 @@ services:
       BEHIND_PROXY: "${BEHIND_PROXY:-true}"
       ADMIN_EMAIL: "admin@localhost"
       XDG_DATA_HOME: /pelican-data
-      CACHE_STORE: redis
-      SESSION_DRIVER: redis
-      QUEUE_CONNECTION: redis
-      REDIS_HOST: cache
+      CACHE_STORE: file
+      SESSION_DRIVER: file
+      QUEUE_CONNECTION: database
       DB_CONNECTION: mariadb
       DB_HOST: database
       DB_PORT: 3306
@@ -50,7 +44,6 @@ services:
       - ./data/panel:/pelican-data
     depends_on:
       - database
-      - cache
 
   # ---------- Wings (daemon that manages game-server containers) ----------
   wings:
