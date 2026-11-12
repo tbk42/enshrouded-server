@@ -31,7 +31,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
-      APP_URL: "http://localhost:${PANEL_PORT:-36747}"
+      APP_URL: "http://localhost"
       ADMIN_EMAIL: "admin@localhost"
       XDG_DATA_HOME: /pelican-data
       CACHE_STORE: redis
