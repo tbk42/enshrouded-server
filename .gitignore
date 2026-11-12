@@ -1,0 +1,10 @@
+# Runtime data (large, generated)
+data/
+gamefiles/
+
+# Secrets
+.env
+
+# Keep templates
+!.env.example
+!wings/config.yml.example

@@ -1,0 +1,95 @@
+# Enshrouded server + Pelican Panel (contained management UI)
+# Stack: Pelican Panel (web UI) + MariaDB + Redis + Wings (daemon) + Enshrouded (managed by Wings)
+# Usage: cp .env.example .env && docker compose up -d
+
+services:
+  # ---------- Database ----------
+  database:
+    image: mariadb:10.11
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./data/db:/var/lib/mysql
+
+  # ---------- Redis (cache + queues) ----------
+  cache:
+    image: redis:alpine
+    restart: unless-stopped
+
+  # ---------- Pelican Panel (web UI) ----------
+  panel:
+    image: ghcr.io/pelican/panel:latest
+    restart: unless-stopped
+    ports:
+      - "${PANEL_PORT:-8080}:80"
+      - "${PANEL_PORT_SSL:-8443}:443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      APP_URL: "http://localhost:${PANEL_PORT:-8080}"
+      ADMIN_EMAIL: "admin@localhost"
+      XDG_DATA_HOME: /pelican-data
+      CACHE_STORE: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: cache
+      DB_CONNECTION: mariadb
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      MAIL_DRIVER: log
+    volumes:
+      - ./data/panel:/pelican-data
+    depends_on:
+      - database
+      - cache
+
+  # ---------- Wings (daemon that manages game-server containers) ----------
+  wings:
+    image: ghcr.io/pelican/wings:latest
+    restart: unless-stopped
+    ports:
+      - "${WINGS_PORT:-8081}:8080"
+      - "${WINGS_SFTP_PORT:-2022}:2022"
+    environment:
+      TZ: "UTC"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./wings/config.yml:/etc/pelican/config.yml:ro
+      - ./data/wings:/var/lib/pelican
+      - ./gamefiles:/var/lib/pelican/volumes
+    depends_on:
+      - panel
+
+  # ---------- Enshrouded server (managed by Wings via the egg) ----------
+  # NOTE: Do NOT start this service directly. Wings creates and manages the
+  # enshrouded container from the egg (eggs/enshrouded.json) once you
+  # configure the node + server in the Pelican panel.
+  # The image below is referenced by the egg's docker_images field.
+  enshrouded:
+    image: mornedhels/enshrouded-server:latest
+    profiles: ["manual"]
+    restart: "no"
+    ports:
+      - "15636:15636/tcp"
+      - "15636:15636/udp"
+      - "15637:15637/tcp"
+      - "15637:15637/udp"
+    volumes:
+      - ./gamefiles:/opt/enshrouded
+    environment:
+      SERVER_NAME: "Enshrouded Server"
+      UPDATE_CRON: "*/30 * * * *"
+      PUID: "4711"
+      PGID: "4711"
+      WINEDLLOVERRIDES: "dbghelp=native,builtin;winmm=native,builtin"
+    devices:
+      - /dev/ntsync:/dev/ntsync
+    stop_grace_period: 120s

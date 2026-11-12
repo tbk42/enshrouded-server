@@ -1,0 +1,89 @@
+{
+  "author": "local",
+  "name": "Enshrouded (Mornedhels image)",
+  "description": "Enshrouded dedicated server using the mornedhels/enshrouded-server image. Container-managed by Wings. Server-side mods (EML + ShroudForge + Greeneye) are seeded into the persistent gamefiles volume.",
+  "features": ["docker_image", "steam_disk_space"],
+  "docker_images": {
+    "Mornedhels (latest)": "mornedhels/enshrouded-server:latest"
+  },
+  "startup": "./enshrouded-server.sh",
+  "config": {
+    "files": {},
+    "startup": { "done": "Switching state from LoadEcsScene to Run" },
+    "stop": "^C",
+    "logs": "/opt/enshrouded/logs/*.log",
+    "file_denylist": []
+  },
+  "scripts": {
+    "installation": {
+      "script": "#!/bin/bash\nset -e\necho 'Enshrouded install handled by image entrypoint on first run.'\nmkdir -p /opt/enshrouded/mods /opt/enshrouded/savegame\n",
+      "container": "mornedhels/enshrouded-server:latest",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": [
+    {
+      "name": "Server Name",
+      "description": "Name shown in the server browser.",
+      "env_variable": "SERVER_NAME",
+      "default_value": "Enshrouded Server",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:64"
+    },
+    {
+      "name": "Game Port",
+      "description": "UDP+TCP game port.",
+      "env_variable": "GAME_PORT",
+      "default_value": "15637",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer"
+    },
+    {
+      "name": "Query Port",
+      "description": "UDP query port.",
+      "env_variable": "QUERY_PORT",
+      "default_value": "15636",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer"
+    },
+    {
+      "name": "Slot Count",
+      "description": "Max players.",
+      "env_variable": "SLOT_COUNT",
+      "default_value": "16",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer"
+    },
+    {
+      "name": "Admin Password",
+      "description": "Admin group password (SET_GROUP_ADMIN_PASSWORD).",
+      "env_variable": "SET_GROUP_ADMIN_PASSWORD",
+      "default_value": "change-me-admin",
+      "user_viewable": false,
+      "user_editable": true,
+      "rules": "nullable|string"
+    },
+    {
+      "name": "Guest Password",
+      "description": "Guest group password (SET_GROUP_GUEST_PASSWORD).",
+      "env_variable": "SET_GROUP_GUEST_PASSWORD",
+      "default_value": "change-me-guest",
+      "user_viewable": false,
+      "user_editable": true,
+      "rules": "nullable|string"
+    },
+    {
+      "name": "WINEDLLOVERRIDES",
+      "description": "Mod loader DLL override for Proton/Wine.",
+      "env_variable": "WINEDLLOVERRIDES",
+      "default_value": "dbghelp=native,builtin;winmm=native,builtin",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string"
+    }
+  ]
+}
