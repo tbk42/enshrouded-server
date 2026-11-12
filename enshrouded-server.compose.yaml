@@ -31,8 +31,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
-      APP_URL: "http://localhost:36747"
-      BEHIND_PROXY: "true"
+      APP_URL: "${APP_URL:-http://localhost:36747}"
+      BEHIND_PROXY: "${BEHIND_PROXY:-true}"
       ADMIN_EMAIL: "admin@localhost"
       XDG_DATA_HOME: /pelican-data
       CACHE_STORE: redis
