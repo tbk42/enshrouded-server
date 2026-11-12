@@ -18,7 +18,7 @@ contained web UI (Pelican Panel + Wings) — no host-level management agents.
 ```bash
 cp .env.example .env
 # edit .env (passwords, ports)
-docker compose up -d
+docker compose -f enshrouded-server.compose.yaml up -d
 ```
 
 Open the panel at http://localhost:8080 and create your admin account on first run.
@@ -28,7 +28,7 @@ Open the panel at http://localhost:8080 and create your admin account on first r
 1. In the panel: **Admin -> Nodes -> Create Node**.
 2. Copy the node UUID + token into `wings/config.yml` (from `wings/config.yml.example`).
 3. Set `panel.url` to `http://panel` (or your panel URL).
-4. Restart Wings: `docker compose restart wings`.
+4. Restart Wings: `docker compose -f enshrouded-server.compose.yaml restart wings`.
 
 ## Add the Enshrouded server
 
