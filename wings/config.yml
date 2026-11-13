@@ -4,7 +4,7 @@ token_id: "PtcDdPNOZNe6chxs"
 token: "0H3MeH0RFWiUY3QiWmGH6isSiazoHZXl2B0liZFYOn4iKLRQQCrid8vYtlcmn73A"
 api:
   host: 0.0.0.0
-  port: 36748
+  port: 8080
   ssl:
     enabled: false
     cert: ""
@@ -14,10 +14,10 @@ system:
   data: /var/lib/pelican
   sftp:
     bind_address: 0.0.0.0
-    bind_port: 36479
+    bind_port: 2022
     read_only: false
 panel:
-  url: "http://localhost:36747"
-remote: "http://localhost:36747"
+  url: "http://panel"
+remote: "http://panel"
 allowed_mounts: []
 allowed_origins: []
