@@ -11,7 +11,7 @@ api:
     key: ""
   upload_limit: 256
 system:
-  data: /var/lib/pelican
+  data: /unified/git/tbk42/enshrouded-server/data/wings
   sftp:
     bind_address: 0.0.0.0
     bind_port: 2022

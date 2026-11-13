@@ -58,8 +58,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./wings/config.yml:/etc/pelican/config.yml:ro
-      - ./data/wings:/var/lib/pelican
-      - ./gamefiles:/var/lib/pelican/volumes
+      - ./data/wings:/unified/git/tbk42/enshrouded-server/data/wings
+      - ./gamefiles:/opt/enshrouded
 
   # ---------- Enshrouded server (managed by Wings via the egg) ----------
   # NOTE: Do NOT start this service directly. Wings creates and manages the
